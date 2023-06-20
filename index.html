@@ -1,12 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Exámen JS - MYB</title>
 </head>
+
 <body>
-    
+    <div id="loading-container">
+        <div id="loading"></div>
+    </div>
+    <div class="grid-layout">
+        <div class="box header">
+            <h1>Filtrador de películas</h1>
+        </div>
+        <div class="box content">
+            <div id="buttons">
+                <button class="button-value" onclick="showAll('all')">Todos</button>
+                <button class="button-value" onclick="showAll('genre')">Generos</button>
+
+            </div>
+            <div id="search-container">
+                <label for="titleInput">Título:</label>
+                <input type="text" id="userInput" placeholder="Ingrese el título">
+
+                <label for="genreInput">Género:</label>
+                <input type="text" id="genreInput" placeholder="Ingrese el género">
+                <label for="fromDateInput">Desde:</label>
+                <input type="text" id="fromDateInput">
+
+                <label for="toDateInput">Hasta:</label>
+                <input type="text" id="toDateInput">
+
+                <label for="rateInput">Calificación:</label>
+                <input type="text" id="rateInput" placeholder="Ingrese la calificación">
+
+
+                <button id="searchButton">Buscar</button>
+
+                <div id="resultsContainer"></div>
+            </div>
+            <div id="result"></div>
+        </div>
+        <div class="box lateral">
+            <img src="https://lumiere-a.akamaihd.net/v1/images/56015l02_bigsal_argentina_intpayoff_4x5_b6776139.jpeg"
+                width="100%">
+            <div id="movie-list">
+
+            </div>
+        </div>
+        <div class="box footer">
+            <footer>
+                <p>Desarrollado por Tomás F. Sosa</p>
+                <p>©️ Copyright - 2023</p>
+            </footer>
+        </div>
+    </div>
+    <script src="/scripts/movies-filter.js"></script>
 </body>
+
 </html>
