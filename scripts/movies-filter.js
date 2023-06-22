@@ -2,18 +2,10 @@ window.onload = function () {
   let container = document.getElementById("loading-container");
   container.style.visibility = "hidden";
   container.style.opacity = "0";
-  //showAll("all");
 };
 
 const loadingContainer = document.querySelector(".loading-container");
 
-function hideLoading() {
-  loadingContainer.style.display = "none";
-}
-
-function showLoading() {
-  loadingContainer.style.display = "flex";
-}
 
 const USERS = [
   {
@@ -380,105 +372,116 @@ const MOVIES = [
   },
 ];
 
-const userInput = document.getElementById('userInput');
-const genreInput = document.getElementById('genreInput');
-const searchButton = document.getElementById('searchButton');
-const rateInput = document.getElementById('rateInput');
-const fromDateInput = document.getElementById('fromDateInput');
-const toDateInput = document.getElementById('toDateInput');
-const resultsContainer = document.getElementById('resultsContainer');
+const userInput = document.getElementById("userInput");
+const searchButton = document.getElementById("searchButton");
+const rateInput = document.getElementById("rateInput");
+const fromDateInput = document.getElementById("fromDateInput");
+const toDateInput = document.getElementById("toDateInput");
+const resultsContainer = document.getElementById("resultsContainer");
 
-// const userFilter = userInput.value;
-// const genreFilter = genreInput.value.toLowerCase().trim();
-// const fromDateFilter = fromDateInput.value;
-// const toDateFilter = toDateInput.value;
-// const rateFilter = rateInput.value;
-
-function getUserName(userId) {
-  const user = USERS.find(user => user.id === userId);
-  return user ? user.name : "Usuario no encontrado";
-}
-
-function sendData(){
+//funcion que toma los valores de los inputs y retorna un objeto con la estructura solicitada
+function sendData() {
   const userFilter = userInput.value;
-  const genreFilter = genreInput.value.toLowerCase().trim();
   const fromDateFilter = fromDateInput.value;
   const toDateFilter = toDateInput.value;
   const rateFilter = rateInput.value;
-  const datos = {
+  const data = {
     users: USERS,
-    movies: MOVIES, 
-    userId: userFilter, 
-    fromDate: fromDateFilter, 
-    toDate: toDateFilter, 
-    rate: rateFilter
-  }
+    movies: MOVIES,
+    userId: userFilter,
+    fromDate: fromDateFilter,
+    toDate: toDateFilter,
+    rate: rateFilter,
+  };
 
-const {users,movies, userId,fromDate, toDate,rate} = datos
-const filteredMovies = filterMovies(datos)
-return datos
+  const filteredMovies = filterMovies(data);
+  return data;
 }
 
-// console.log('log funcion: '+sendData().rate)
-  
+//funcion que recibe los resultados de los filtros y los muestra en el HTML
+function showResults(result) {
+  // Limpiar los resultados anteriores
+  resultsContainer.innerHTML = "";
+  result.forEach((item) => {
+    //accede a cada atributo individualmente
+    const id = item.id;
+    const username = item.username;
+    const email = item.email;
+    const fullAddress = item.fullAddress;
+    const company = item.company;
+    const movie = item.movie;
+    const rate = item.rate;
+    const img = item.img;
+
+    //muestra los resultados filtrados
+    const movieContainer = document.createElement("div");
+    const leftContainer = document.createElement("div");
+    const imgContainer = document.createElement("div");
+    const infoContainer = document.createElement("div");
+    const rightContainer = document.createElement("div");
+    const movieElement = document.createElement("h2");
+    const usernameElement = document.createElement("p");
+    const idElement = document.createElement("p");
+    const emailElement = document.createElement("p");
+    const fullAddressElement = document.createElement("p");
+    const companyElement = document.createElement("p");
+    const rateElement = document.createElement("p");
+    const imageElement = document.createElement("img");
+
+    //agrego clases css a los contenedores
+    movieContainer.classList.add('movie-container')
+    leftContainer.classList.add('left-container')
+    rightContainer.classList.add('right-container')
+    imgContainer.classList.add('img-container')
+    infoContainer.classList.add('info-container')
+    resultsContainer.classList.add('results-container')
+
+    movieElement.textContent = "Título: " + movie;
+    usernameElement.textContent = "Nombre de usuario: " + username;
+    idElement.textContent = "ID del usuario: " + id;
+    emailElement.textContent = "Email: " + email;
+    fullAddressElement.textContent = "Dirección: " + fullAddress;
+    companyElement.textContent = "Compañia: " + company;
+    rateElement.textContent = "Calificación: " + rate;
+    imageElement.src = img;
+
+    //agrego los elementos sus correspondientes contenedores 
+    imgContainer.appendChild(imageElement);
+    infoContainer.appendChild(movieElement);
+    infoContainer.appendChild(usernameElement);
+    infoContainer.appendChild(idElement);
+    infoContainer.appendChild(emailElement);
+    infoContainer.appendChild(fullAddressElement);
+    infoContainer.appendChild(companyElement);
+    infoContainer.appendChild(rateElement);
+    leftContainer.appendChild(imgContainer)
+    rightContainer.appendChild(infoContainer)
+    movieContainer.appendChild(leftContainer)
+    movieContainer.appendChild(rightContainer)
+    resultsContainer.appendChild(movieContainer);
+  });
+}
+
 function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
-  const arrayCombinado = [...users, ...movies]
-  // Filtrar las películas en función de los criterios de búsqueda
-  const filteredMovies = movies.filter(movie => {
-    //console.log('ÚserFilter: '+userFilter);
+  // Filtrar las películas en función de los criterios de búsqueda que obligatoriamente necesita fromDate y toDate en formato Año-Mes-Dia
+  const filteredMovies = movies.filter((movie) => {
+    //verifica que el userId del objeto movie incluya el userId ingresado por input
     const userMatch = movie.userId.toString().includes(userId);
-    //const genreMatch = movie.genre.toLowerCase().includes(genreFilter);
     const fromDateObj = new Date(fromDate);
     const toDateObj = new Date(toDate);
-    const movieWatchedDate = new Date(movie.watched); 
+    const movieWatchedDate = new Date(movie.watched);
+    //verifica que las fechas convertidas en ms coicidan con la fecha del objeto de MOVIES
     const dateMatch = fromDateObj.getTime() <= movieWatchedDate.getTime() && movieWatchedDate.getTime() <= toDateObj.getTime();
-    //console.log('DATE MATCH: ' + dateMatch);
-    
-    const rateMatch = movie.rate.toString().includes(rate);
-    console.log('toDate desde handle:' + toDate);
 
-    return dateMatch && rateMatch && userMatch
+    //verifica que la calificación que contiene el objeto movie al menos contenga la calificacion introducida por input
+    const rateMatch = movie.rate.toString().includes(rate);
+
+    return dateMatch && rateMatch && userMatch;
   });
 
-  // Limpiar los resultados anteriores
-  resultsContainer.innerHTML = '';
-
-  // Mostrar los resultados filtrados
-  //console.log('filteredMovies: ' + filteredMovies);
-  filteredMovies.forEach(movie => {
-      const userName = getUserName(movie.userId);
-
-      // Crear elementos HTML para mostrar la información de la película
-      const movieContainer = document.createElement('div');
-      const titleElement = document.createElement('h2');
-      const genreElement = document.createElement('p');
-      const userElement = document.createElement('p');
-      const rateElement = document.createElement('p');
-      const watchedElement = document.createElement('p');
-      const test = document.createElement('p');
-      //const fullAddress = users.filter(user =>{ users.id === movie.userId; return user.address.street && user.address.city} )
-
-      titleElement.textContent = "Título: " + movie.title;
-      genreElement.textContent = "Género: " + movie.genre;
-      userElement.textContent = "Usuario: " + userName;
-      rateElement.textContent = "Calificación: " + movie.rate;
-      watchedElement.textContent = "Vista: " + movie.watched;
-      test.textContent = 'TEST: ' + arrayCombinado[0].address.street.city
-
-      // Agregar los elementos al contenedor de resultados
-      movieContainer.appendChild(titleElement);
-      movieContainer.appendChild(genreElement);
-      movieContainer.appendChild(userElement);
-      movieContainer.appendChild(rateElement);
-      movieContainer.appendChild(watchedElement);
-      movieContainer.appendChild(test);
-      movieContainer.appendChild(document.createElement('hr'));
-      resultsContainer.appendChild(movieContainer);
-    });
-    //const fullAddress = `${users.address.street} - ${users.address.city}`
-      const result = filteredMovies.map(movie => {
-    const user = users.find(user => user.id === movie.userId);
-
+  const result = filteredMovies.map((movie) => {
+    const user = users.find((user) => user.id === movie.userId);
+    //retorna el objeto con los atributos solicitados en la consiga, y se le agregó el atributo img para poder usar la imagen en la vista
     return {
       id: user.id,
       username: user.username,
@@ -486,132 +489,12 @@ function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
       fullAddress: `${user.address.street} - ${user.address.city}`,
       company: user.company.name,
       movie: movie.title,
-      rate: movie.rate
+      rate: movie.rate,
+      img: movie.image,
     };
   });
-    console.log(result)
-    return result;
-    }
-  
-  // Asociar el evento de clic al botón de búsqueda
-  //const allData = {users: USERS, movies: MOVIES, userId: sendData().userId, fromDate: sendData().fromDate, toDate: sendData().toDate, rate: sendData().rate}
-  //searchButton.addEventListener('click', sendData);
-  //searchButton.addEventListener('click', sendData,handleSearch(allData));
-
-  //const datos = sendData()
-  
-  searchButton.addEventListener('click', sendData);
-
-// const filterUsers = (user) => {
-//   USERS.filter(usuario => usuario == user ?? usuario )
-// };
-// // { user, movies, userId, fromDate, toDate, rate }
-// function filterMovies(MOVIES, USERS,userId, fromDate, toDate, rate) {
-//   // if(user != null){
-//   //   filterUsers(user)
-//   // }
-//   const filteredMovies = MOVIES.filter(movie => {
-//     const watchedDate = new Date(movie.watched)
-//     if(watchedDate < fromDate || watchedDate > toDate){
-//       return false
-//     }
-//     if(movie.rate < rate){
-//       return false
-//     }
-//     const user = USERS.find(user => user.Id === userId)
-//     if(!user){
-//       return false
-//     }
-//     return movie.userId === user.Id
-//   })
-//   return filteredMovies
-// }
-// function getUserName(userId) {
-//   const user = USERS.find(user => user.id === userId);
-//   return user ? user.name : "Usuario no encontrado";
-// }
-
-// function searchMovies() {
-//   // Obtener valores de los inputs
-//   const userId = document.getElementById('userId').value;
-//   const fromDate = new Date(document.getElementById('fromDate').value);
-//   const toDate = new Date(document.getElementById('toDate').value);
-//   const rate = parseInt(document.getElementById('rate').value);
-
-//   // Llamar a la función filterMovies y obtener el resultado
-//   const filteredMovies = filterMovies(MOVIES, USERS, userId, fromDate, toDate, rate);
-
-//   // Mostrar el resultado en el HTML
-//   const resultContainer = document.getElementById('result');
-//   resultContainer.innerHTML = '';
-
-//   filteredMovies.forEach(movie => {
-//     const movieElement = document.createElement('p');
-//     movieElement.textContent = movie.title;
-//     resultContainer.appendChild(movieElement);
-//   });
-// }
-
-// const filteredMovies = filterMovies();
-// const resultadosDiv = document.getElementById('resultados');
-//   resultadosDiv.innerHTML = ''; // Limpiar contenido anterior
-
-//   if (filteredMovies.length === 0) {
-//     resultadosDiv.innerHTML = 'No se encontraron películas que coincidan con los filtros.';
-//   } else {
-//     filteredMovies.forEach(function(movie) {
-//       let peliculaHTML = '<p>Título: ' + movie.title + '</p>';
-//       peliculaHTML += '<p>UserID: ' + movie.userId + '</p>';
-//       peliculaHTML += '<p>Calificación: ' + movie.rate + '</p>';
-//       peliculaHTML += '<p>Fecha: ' + movie.watched + '</p>';
-//       peliculaHTML += '<hr>';
-
-//       resultadosDiv.innerHTML += peliculaHTML;
-//     });
-//   }
-
-
-
-// function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
-//   const filteredMovies = movies.filter(movie => {
-//     //console.log('ÚserFilter: '+userFilter);
-//     const userMatch = movie.userId.toString().includes(userId);
-//     //const genreMatch = movie.genre.toLowerCase().includes(genreFilter);
-//     const fromDateObj = new Date(fromDate);
-//     const toDateObj = new Date(toDate);
-//     const movieWatchedDate = new Date(movie.watched); 
-//     const dateMatch = fromDateObj.getTime() <= movieWatchedDate.getTime() && movieWatchedDate.getTime() <= toDateObj.getTime();
-//     //console.log('DATE MATCH: ' + dateMatch);
-    
-//     const rateMatch = movie.rate.toString().includes(rate);
-//     console.log('toDate desde handle:' + toDate);
-
-//     return dateMatch && rateMatch && userMatch
-//   });
-
-//   const result = filteredMovies.map(movie => {
-//     const user = users.find(user => user.id === movie.userId);
-
-//     return {
-//       id: user.id,
-//       username: user.username,
-//       email: user.email,
-//       fullAddress: `${user.address.street} - ${user.address.city}`,
-//       company: user.company.name,
-//       movie: movie.title,
-//       rate: movie.rating
-//     };
-//   });
-//   console.log(result)
-//   return result;
-// }
-
-// const filteredMovies = filterMovies({
-//   users: USERS,
-//   movies: MOVIES,
-//   userId: 1,
-//   fromDate: new Date('2010-01-01'),
-//   toDate: new Date('2023-12-31'),
-//   rate: 1.0
-// });
-// console.log(filteredMovies);
+  showResults(result);
+  return result;
+}
+// Asocia el evento click a la funcion sendData
+searchButton.addEventListener("click", sendData);

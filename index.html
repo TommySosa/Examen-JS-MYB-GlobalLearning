@@ -13,43 +13,27 @@
     <div id="loading-container">
         <div id="loading"></div>
     </div>
-    <div class="grid-layout">
-        <div class="box header">
+    <main class="grid-layout">
+        <header class="box header">
             <h1>Filtrador de películas</h1>
-        </div>
+        </header>
         <div class="box content">
-            <div id="buttons">
-                <button class="button-value" onclick="showAll('all')">Todos</button>
-                <button class="button-value" onclick="showAll('genre')">Generos</button>
-
-            </div>
             <div id="search-container">
-                <label for="titleInput">Título:</label>
-                <input type="text" id="userInput" placeholder="Ingrese el título">
+                <label for="titleInput">ID del usario:</label>
+                <input type="text" id="userInput" placeholder="Ingrese el ID">
 
-                <label for="genreInput">Género:</label>
-                <input type="text" id="genreInput" placeholder="Ingrese el género">
                 <label for="fromDateInput">Desde:</label>
-                <input type="text" id="fromDateInput">
+                <input type="text" id="fromDateInput" placeholder="Año-mes-día">
 
                 <label for="toDateInput">Hasta:</label>
-                <input type="text" id="toDateInput">
+                <input type="text" id="toDateInput" placeholder="Año-mes-día">
 
                 <label for="rateInput">Calificación:</label>
                 <input type="text" id="rateInput" placeholder="Ingrese la calificación">
 
 
                 <button id="searchButton">Buscar</button>
-
                 <div id="resultsContainer"></div>
-            </div>
-            <div id="result"></div>
-        </div>
-        <div class="box lateral">
-            <img src="https://lumiere-a.akamaihd.net/v1/images/56015l02_bigsal_argentina_intpayoff_4x5_b6776139.jpeg"
-                width="100%">
-            <div id="movie-list">
-
             </div>
         </div>
         <div class="box footer">
@@ -58,7 +42,7 @@
                 <p>©️ Copyright - 2023</p>
             </footer>
         </div>
-    </div>
+    </main>
     <script src="/scripts/movies-filter.js"></script>
 </body>
 
