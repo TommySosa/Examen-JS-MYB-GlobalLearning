@@ -12,7 +12,12 @@
 }
 body{
     font-family: 'Yanone Kaffeesatz', sans-serif;
-    background-color: #3a3838;
+    background-color: #141414;
+    background-image: url(img/banner.png);
+    background-repeat: repeat-y;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 10px solid var(--primary-color);
 }
 
 .grid-layout{
@@ -39,7 +44,6 @@ body{
     display: flex;
     justify-content: center;
     margin-top: 3em;
-    
 }
 .footer{
     grid-area: footer;
@@ -70,8 +74,8 @@ body{
 .movie-container{
     background-color: #fafafa;
     box-shadow: -11px 10px 5px 0px rgba(0,0,0,0.75);
--webkit-box-shadow: -11px 10px 5px 0px rgba(0,0,0,0.75);
--moz-box-shadow: -11px 10px 5px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -11px 10px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: -11px 10px 5px 0px rgba(0,0,0,0.75);
 }
 .movie-container p{
     margin-bottom: 0.5em;
@@ -155,8 +159,8 @@ body{
 #search-container input:focus, #search-container select:focus{
     
     box-shadow: -4px 5px 6px 0px rgba(103,89,255,0.64);
--webkit-box-shadow: -4px 5px 6px 0px rgba(103,89,255,0.64);
--moz-box-shadow: -4px 5px 6px 0px rgba(103,89,255,0.64);
+    -webkit-box-shadow: -4px 5px 6px 0px rgba(103,89,255,0.64);
+    -moz-box-shadow: -4px 5px 6px 0px rgba(103,89,255,0.64);
 }
 #search-container button{
     padding: 1em 5em;
