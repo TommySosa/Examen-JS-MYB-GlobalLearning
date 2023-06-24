@@ -19,18 +19,23 @@
         </header>
         <div class="box content">
             <div id="search-container">
-                <label for="titleInput">ID del usario:</label>
-                <input type="text" id="userInput" placeholder="Ingrese el ID">
+                <h3>Ingresa los siguientes datos para filtrar las películas: </h3>
+                <br>
 
                 <label for="fromDateInput">Desde:</label>
-                <input type="text" id="fromDateInput" placeholder="Año-mes-día">
+                <input type="text" id="fromDateInput" placeholder="Año-mes-día" required>
 
                 <label for="toDateInput">Hasta:</label>
-                <input type="text" id="toDateInput" placeholder="Año-mes-día">
+                <input type="text" id="toDateInput" placeholder="Año-mes-día" required>
+
+                <label for="userInput">ID del usario:</label>
+                <!-- <input type="text" id="userInput" placeholder="Ingrese el ID"> -->
+                <select name="userInput" id="userInput">
+                    <option value="">Todos</option>  
+                </select>
 
                 <label for="rateInput">Calificación:</label>
                 <input type="text" id="rateInput" placeholder="Ingrese la calificación">
-
 
                 <button id="searchButton">Buscar</button>
                 <div id="resultsContainer"></div>
@@ -43,6 +48,12 @@
             </footer>
         </div>
     </main>
+    <dialog id="errorDialog">
+        <h1>Ingresa una fecha válida.</h1>
+        <p>Con el siguiente formato: </p>
+        <p>AÑO - MES - DIA</p>
+        <button id="closeDialog">Cerrar</button>
+    </dialog>
     <script src="/scripts/movies-filter.js"></script>
 </body>
 

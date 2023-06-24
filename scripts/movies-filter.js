@@ -6,7 +6,6 @@ window.onload = function () {
 
 const loadingContainer = document.querySelector(".loading-container");
 
-
 const USERS = [
   {
     id: 1,
@@ -378,6 +377,12 @@ const rateInput = document.getElementById("rateInput");
 const fromDateInput = document.getElementById("fromDateInput");
 const toDateInput = document.getElementById("toDateInput");
 const resultsContainer = document.getElementById("resultsContainer");
+const errorDialog = document.getElementById("errorDialog");
+const closeDialogButton = document.getElementById("closeDialog");
+
+USERS.forEach(e => {
+  userInput.innerHTML += `<option value=${e.id}>${e.id}</option>`;
+});
 
 //funcion que toma los valores de los inputs y retorna un objeto con la estructura solicitada
 function sendData() {
@@ -429,15 +434,15 @@ function showResults(result) {
     const imageElement = document.createElement("img");
 
     //agrego clases css a los contenedores
-    movieContainer.classList.add('movie-container')
-    leftContainer.classList.add('left-container')
-    rightContainer.classList.add('right-container')
-    imgContainer.classList.add('img-container')
-    infoContainer.classList.add('info-container')
-    resultsContainer.classList.add('results-container')
+    movieContainer.classList.add("movie-container");
+    leftContainer.classList.add("left-container");
+    rightContainer.classList.add("right-container");
+    imgContainer.classList.add("img-container");
+    infoContainer.classList.add("info-container");
+    resultsContainer.classList.add("results-container");
 
-    movieElement.textContent = "Título: " + movie;
-    usernameElement.textContent = "Nombre de usuario: " + username;
+    movieElement.textContent = movie;
+    usernameElement.textContent = "Usuario: " + username;
     idElement.textContent = "ID del usuario: " + id;
     emailElement.textContent = "Email: " + email;
     fullAddressElement.textContent = "Dirección: " + fullAddress;
@@ -445,7 +450,7 @@ function showResults(result) {
     rateElement.textContent = "Calificación: " + rate;
     imageElement.src = img;
 
-    //agrego los elementos sus correspondientes contenedores 
+    //agrego los elementos sus correspondientes contenedores
     imgContainer.appendChild(imageElement);
     infoContainer.appendChild(movieElement);
     infoContainer.appendChild(usernameElement);
@@ -454,10 +459,10 @@ function showResults(result) {
     infoContainer.appendChild(fullAddressElement);
     infoContainer.appendChild(companyElement);
     infoContainer.appendChild(rateElement);
-    leftContainer.appendChild(imgContainer)
-    rightContainer.appendChild(infoContainer)
-    movieContainer.appendChild(leftContainer)
-    movieContainer.appendChild(rightContainer)
+    leftContainer.appendChild(imgContainer);
+    rightContainer.appendChild(infoContainer);
+    movieContainer.appendChild(leftContainer);
+    movieContainer.appendChild(rightContainer);
     resultsContainer.appendChild(movieContainer);
   });
 }
@@ -466,17 +471,30 @@ function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
   // Filtrar las películas en función de los criterios de búsqueda que obligatoriamente necesita fromDate y toDate en formato Año-Mes-Dia
   const filteredMovies = movies.filter((movie) => {
     //verifica que el userId del objeto movie incluya el userId ingresado por input
-    const userMatch = movie.userId.toString().includes(userId);
-    const fromDateObj = new Date(fromDate);
-    const toDateObj = new Date(toDate);
-    const movieWatchedDate = new Date(movie.watched);
-    //verifica que las fechas convertidas en ms coicidan con la fecha del objeto de MOVIES
-    const dateMatch = fromDateObj.getTime() <= movieWatchedDate.getTime() && movieWatchedDate.getTime() <= toDateObj.getTime();
 
-    //verifica que la calificación que contiene el objeto movie al menos contenga la calificacion introducida por input
-    const rateMatch = movie.rate.toString().includes(rate);
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
 
-    return dateMatch && rateMatch && userMatch;
+    if (regex.test(fromDate) && regex.test(toDate)) {
+      const userMatch = movie.userId.toString().includes(userId);
+      const fromDateObj = new Date(fromDate);
+      const toDateObj = new Date(toDate);
+      const movieWatchedDate = new Date(movie.watched);
+      //verifica que las fechas convertidas en ms coicidan con la fecha del objeto de MOVIES
+      const dateMatch =
+        fromDateObj.getTime() <= movieWatchedDate.getTime() &&
+        movieWatchedDate.getTime() <= toDateObj.getTime();
+        
+        //verifica que la calificación que contiene el objeto movie al menos contenga la calificacion introducida por input
+        const rateMatch = movie.rate.toString().includes(rate);
+
+      return userMatch && dateMatch && rateMatch;
+    } else {
+      if (errorDialog.open) {
+        errorDialog.close();
+      } else {
+        errorDialog.showModal();
+      }
+    }
   });
 
   const result = filteredMovies.map((movie) => {
@@ -498,3 +516,6 @@ function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
 }
 // Asocia el evento click a la funcion sendData
 searchButton.addEventListener("click", sendData);
+closeDialogButton.addEventListener("click", function () {
+  errorDialog.close();
+});
