@@ -371,6 +371,7 @@ const MOVIES = [
   },
 ];
 
+
 const userInput = document.getElementById("userInput");
 const searchButton = document.getElementById("searchButton");
 const rateInput = document.getElementById("rateInput");
@@ -380,6 +381,7 @@ const resultsContainer = document.getElementById("resultsContainer");
 const errorDialog = document.getElementById("errorDialog");
 const closeDialogButton = document.getElementById("closeDialog");
 
+//muestro los id's disponibles en las opciones del select
 USERS.forEach(e => {
   userInput.innerHTML += `<option value=${e.id}>${e.id}</option>`;
 });
@@ -405,7 +407,7 @@ function sendData() {
 
 //funcion que recibe los resultados de los filtros y los muestra en el HTML
 function showResults(result) {
-  // Limpiar los resultados anteriores
+  //limpia los resultados anteriores
   resultsContainer.innerHTML = "";
   result.forEach((item) => {
     //accede a cada atributo individualmente
@@ -470,28 +472,28 @@ function showResults(result) {
 function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
   // Filtrar las películas en función de los criterios de búsqueda que obligatoriamente necesita fromDate y toDate en formato Año-Mes-Dia
   const filteredMovies = movies.filter((movie) => {
-    //verifica que el userId del objeto movie incluya el userId ingresado por input
+    
 
     const regex = /^\d{4}-\d{2}-\d{2}$/;
 
     if (regex.test(fromDate) && regex.test(toDate)) {
+      //verifica que el userId del objeto movie incluya el userId ingresado por input
       const userMatch = movie.userId.toString().includes(userId);
       const fromDateObj = new Date(fromDate);
       const toDateObj = new Date(toDate);
       const movieWatchedDate = new Date(movie.watched);
       //verifica que las fechas convertidas en ms coicidan con la fecha del objeto de MOVIES
-      const dateMatch =
-        fromDateObj.getTime() <= movieWatchedDate.getTime() &&
-        movieWatchedDate.getTime() <= toDateObj.getTime();
+      const dateMatch = fromDateObj.getTime() <= movieWatchedDate.getTime() && movieWatchedDate.getTime() <= toDateObj.getTime();
         
-        //verifica que la calificación que contiene el objeto movie al menos contenga la calificacion introducida por input
-        const rateMatch = movie.rate.toString().includes(rate);
+      //verifica que la calificación que contiene el objeto movie al menos contenga la calificacion introducida por input
+      const rateMatch = movie.rate.toString().includes(rate);
 
       return userMatch && dateMatch && rateMatch;
     } else {
       if (errorDialog.open) {
         errorDialog.close();
       } else {
+        //muestra un dialog indicando el error si no se ingresa un formato de fecha válida
         errorDialog.showModal();
       }
     }
@@ -514,7 +516,7 @@ function filterMovies({ users, movies, userId, fromDate, toDate, rate }) {
   showResults(result);
   return result;
 }
-// Asocia el evento click a la funcion sendData
+//asocia el evento click a la funcion sendData
 searchButton.addEventListener("click", sendData);
 closeDialogButton.addEventListener("click", function () {
   errorDialog.close();
